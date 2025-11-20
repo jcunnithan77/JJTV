@@ -23,6 +23,7 @@ node_modules/
 # Local configuration
 .env
 config.local.py
+cookies.txt
 
 # IDE
 .vscode/

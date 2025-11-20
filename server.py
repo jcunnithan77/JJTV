@@ -98,14 +98,19 @@ YDL_OPTS = {
     'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
 }
 
-# Add cookie support if running locally (Chrome available)
-# On production servers like Render, skip cookies to avoid errors
+# Add cookie support for YouTube authentication
+# Priority: 1) cookies.txt file, 2) Chrome browser, 3) no cookies
 import os
-if os.path.exists(os.path.expanduser('~/.config/google-chrome')) or os.path.exists(os.path.expanduser('~/AppData/Local/Google/Chrome')):
+
+cookies_file = os.path.join(os.path.dirname(__file__), 'cookies.txt')
+if os.path.exists(cookies_file):
+    YDL_OPTS['cookiefile'] = cookies_file
+    logger.info(f"Using cookies file: {cookies_file}")
+elif os.path.exists(os.path.expanduser('~/.config/google-chrome')) or os.path.exists(os.path.expanduser('~/AppData/Local/Google/Chrome')):
     YDL_OPTS['cookiesfrombrowser'] = ('chrome',)
     logger.info("Chrome detected - using browser cookies for YouTube authentication")
 else:
-    logger.info("Chrome not detected - skipping cookie authentication")
+    logger.warning("No cookies available - YouTube may block requests with bot detection")
 
 # Cache for 1 hour to reduce YouTube requests
 cache_timeout = timedelta(hours=1)
