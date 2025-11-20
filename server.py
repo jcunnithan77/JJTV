@@ -99,18 +99,30 @@ YDL_OPTS = {
 }
 
 # Add cookie support for YouTube authentication
-# Priority: 1) cookies.txt file, 2) Chrome browser, 3) no cookies
+# Priority: 1) Environment variable, 2) cookies.txt file, 3) Chrome browser, 4) no cookies
 import os
+import tempfile
 
-cookies_file = os.path.join(os.path.dirname(__file__), 'cookies.txt')
-if os.path.exists(cookies_file):
+# Check for cookies in environment variable (for Render deployment)
+cookies_env = os.environ.get('YOUTUBE_COOKIES')
+if cookies_env:
+    # Create temporary cookies file from environment variable
+    cookies_file = os.path.join(tempfile.gettempdir(), 'yt_cookies.txt')
+    with open(cookies_file, 'w') as f:
+        f.write(cookies_env)
     YDL_OPTS['cookiefile'] = cookies_file
-    logger.info(f"Using cookies file: {cookies_file}")
-elif os.path.exists(os.path.expanduser('~/.config/google-chrome')) or os.path.exists(os.path.expanduser('~/AppData/Local/Google/Chrome')):
-    YDL_OPTS['cookiesfrombrowser'] = ('chrome',)
-    logger.info("Chrome detected - using browser cookies for YouTube authentication")
+    logger.info("Using cookies from YOUTUBE_COOKIES environment variable")
 else:
-    logger.warning("No cookies available - YouTube may block requests with bot detection")
+    # Check for cookies.txt file
+    cookies_file = os.path.join(os.path.dirname(__file__), 'cookies.txt')
+    if os.path.exists(cookies_file):
+        YDL_OPTS['cookiefile'] = cookies_file
+        logger.info(f"Using cookies file: {cookies_file}")
+    elif os.path.exists(os.path.expanduser('~/.config/google-chrome')) or os.path.exists(os.path.expanduser('~/AppData/Local/Google/Chrome')):
+        YDL_OPTS['cookiesfrombrowser'] = ('chrome',)
+        logger.info("Chrome detected - using browser cookies for YouTube authentication")
+    else:
+        logger.warning("No cookies available - YouTube may block requests with bot detection")
 
 # Cache for 1 hour to reduce YouTube requests
 cache_timeout = timedelta(hours=1)
