@@ -1,1 +1,0 @@
-This folder would include raw assets like standby audio or fallback JSON.

@@ -1,0 +1,126 @@
+[
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_activity_player.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\activity_player.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\xml_network_security_config.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\xml\\network_security_config.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_channel_item.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\channel_item.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\drawable_bg_group_card_normal.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\drawable\\bg_group_card_normal.xml"
+    },
+    {
+        "merged": "com.example.jjutv.app-debug-59:/layout_activity_player.xml.flat",
+        "source": "com.example.jjutv.app-main-61:/layout/activity_player.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_activity_group.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\activity_group.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-mdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\activity_main.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_video_card.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\video_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\drawable_video_card_selector.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\drawable\\video_card_selector.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_group_card.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\group_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xxxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xxxhdpi\\ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xhdpi_ic_launcher_foreground.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xhdpi\\ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-mdpi_ic_launcher_foreground.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-mdpi\\ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-hdpi_ic_launcher_foreground.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-hdpi\\ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xxxhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\drawable_bg_group_card_selected.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\drawable\\bg_group_card_selected.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xxhdpi_ic_launcher_foreground.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xxhdpi\\ic_launcher_foreground.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\drawable\\ic_launcher_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\layout_activity_settings.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\layout\\activity_settings.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\drawable_rounded_button_background.xml.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\drawable\\rounded_button_background.xml"
+    },
+    {
+        "merged": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-debug-59:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\jc_un\\.gradle\\daemon\\8.13\\com.example.jjutv.app-main-61:\\mipmap-hdpi\\ic_launcher_round.webp"
+    }
+]

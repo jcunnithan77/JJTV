@@ -1,17 +1,3 @@
-# Android build files
-*.iml
-.gradle
-/local.properties
-/.idea/
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-*.apk
-*.ap_
-*.aab
-
 # Python
 __pycache__/
 *.py[cod]
