@@ -96,6 +96,8 @@ YDL_OPTS = {
     'no_warnings': False,
     'extract_flat': False,
     'user_agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    # Use cookies from browser to bypass bot detection
+    'cookiesfrombrowser': ('chrome',),  # Extract cookies from Chrome browser
 }
 
 # Cache for 1 hour to reduce YouTube requests
