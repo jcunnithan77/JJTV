@@ -10,10 +10,8 @@ import java.util.concurrent.TimeUnit
 
 class BackendExtractor {
 
-    // IMPORTANT: Change this to your backend server URL!
-    // Local network: "http://192.168.1.XXX:5000" (replace with your PC's IP)
-    // Cloud: "https://your-domain.com"
-    private val BACKEND_URL = "http://192.168.1.10:5000"  // Backend server IP
+    // Backend server URL - Render deployment
+    private val BACKEND_URL = "https://jjtv.onrender.com"
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)

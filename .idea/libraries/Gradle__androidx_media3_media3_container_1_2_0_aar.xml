@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.media3:media3-container:1.2.0@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/8.13/transforms/cbb059e72278aeea762d84074680f973/transformed/media3-container-1.2.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/cbb059e72278aeea762d84074680f973/transformed/media3-container-1.2.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.media3/media3-container/1.2.0/4135e385db633ae2d449e5caead974dd99af697d/media3-container-1.2.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

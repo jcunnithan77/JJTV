@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.tv:tv-material:1.0.0-alpha07@aar" external-system-id="GRADLE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/8.13/transforms/78d1ca9afcffcfd5b69a5b44440be4a4/transformed/tv-material-1.0.0-alpha07/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/78d1ca9afcffcfd5b69a5b44440be4a4/transformed/tv-material-1.0.0-alpha07/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/8.13/transforms/78d1ca9afcffcfd5b69a5b44440be4a4/transformed/tv-material-1.0.0-alpha07/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.tv/tv-material/1.0.0-alpha07/6a86452c25d056d71e00f4df62b03eaf1bb26d07/tv-material-1.0.0-alpha07-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

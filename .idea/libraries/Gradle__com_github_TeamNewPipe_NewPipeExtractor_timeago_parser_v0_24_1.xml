@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.TeamNewPipe.NewPipeExtractor:timeago-parser:v0.24.1" type="java-imported" external-system-id="GRADLE">
+    <properties groupId="com.github.TeamNewPipe.NewPipeExtractor" artifactId="timeago-parser" version="v0.24.1" baseVersion="v0.24.1" />
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.TeamNewPipe.NewPipeExtractor/timeago-parser/v0.24.1/b71af078b5f3a9e9901a4597a574aee68885db2a/timeago-parser-v0.24.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
