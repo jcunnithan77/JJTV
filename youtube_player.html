@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Playlist Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .player-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-wrapper {
+            position: relative;
+            width: 100%;
+            flex: 1;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .controls {
+            background-color: #1a1a1a;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn:active {
+            background-color: #cc0000;
+        }
+
+        .btn:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
+
+        .video-info {
+            color: white;
+            flex: 1;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .video-title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .video-counter {
+            color: #aaa;
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="player-container">
+        <div class="player-wrapper">
+            <iframe id="youtube-player"
+                src=""
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="controls">
+            <button class="btn" id="prev-btn" onclick="previousVideo()">← Previous</button>
+            <div class="video-info">
+                <div class="video-title" id="video-title">Loading...</div>
+                <div class="video-counter" id="video-counter">0 / 0</div>
+            </div>
+            <button class="btn" id="next-btn" onclick="nextVideo()">Next →</button>
+        </div>
+    </div>
+
+    <script>
+        // Pre-loaded playlist - Add your video IDs and titles here
+        const playlist = [
+            { id: 'dQw4w9WgXcQ', title: 'Video 1' },
+            { id: 'jNQXAC9IVRw', title: 'Video 2' },
+            { id: 'L_jWHffIx5E', title: 'Video 3' }
+        ];
+
+        let currentIndex = 0;
+
+        // Function to load playlist from Android (optional)
+        function loadPlaylist(playlistJson) {
+            try {
+                const newPlaylist = JSON.parse(playlistJson);
+                if (Array.isArray(newPlaylist) && newPlaylist.length > 0) {
+                    playlist.length = 0;
+                    playlist.push(...newPlaylist);
+                    currentIndex = 0;
+                    loadVideo(currentIndex);
+                }
+            } catch (e) {
+                console.error('Error loading playlist:', e);
+            }
+        }
+
+        // Function to load a video by index
+        function loadVideo(index) {
+            if (index < 0 || index >= playlist.length) return;
+
+            currentIndex = index;
+            const video = playlist[currentIndex];
+            const iframe = document.getElementById('youtube-player');
+
+            // Update iframe src with new video ID
+            iframe.src = `https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&origin=file://`;
+
+            // Update UI
+            document.getElementById('video-title').textContent = video.title;
+            document.getElementById('video-counter').textContent = `${currentIndex + 1} / ${playlist.length}`;
+
+            // Update button states
+            document.getElementById('prev-btn').disabled = currentIndex === 0;
+            document.getElementById('next-btn').disabled = currentIndex === playlist.length - 1;
+        }
+
+        function nextVideo() {
+            if (currentIndex < playlist.length - 1) {
+                loadVideo(currentIndex + 1);
+            }
+        }
+
+        function previousVideo() {
+            if (currentIndex > 0) {
+                loadVideo(currentIndex - 1);
+            }
+        }
+
+        // Function to play specific video by index (can be called from Android)
+        function playVideoAtIndex(index) {
+            loadVideo(index);
+        }
+
+        // Load first video on page load
+        window.onload = function() {
+            if (playlist.length > 0) {
+                loadVideo(0);
+            }
+        };
+    </script>
+</body>
+</html>

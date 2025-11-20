@@ -1,0 +1,49 @@
+# Android build files
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+*.apk
+*.ap_
+*.aab
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+
+# Database files (don't commit user data)
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+
+# Node modules (if any)
+node_modules/
+
+# Local configuration
+.env
+config.local.py
+
+# IDE
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

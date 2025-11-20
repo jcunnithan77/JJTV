@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JJUTV Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .list-item {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .list-item:hover {
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .list-item-content {
+            flex: 1;
+        }
+
+        .list-item-title {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .list-item-meta {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .list-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            opacity: 0.3;
+            margin-bottom: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .video-preview {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+        }
+
+        .video-preview img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .video-preview-content {
+            flex: 1;
+        }
+
+        .video-preview-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .video-preview-id {
+            color: #999;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>JJUTV Admin Panel</h1>
+            <p>Manage Channels, Video Groups & Content</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('channels')">Channels</button>
+            <button class="tab" onclick="switchTab('groups')">Video Groups</button>
+            <button class="tab" onclick="switchTab('videos')">Add Videos</button>
+        </div>
+
+        <!-- Channels Tab -->
+        <div id="channels-tab" class="tab-content active">
+            <div class="section">
+                <h2>Add New Channel</h2>
+                <div id="channel-message"></div>
+                <form onsubmit="addChannel(event)">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Channel ID *</label>
+                            <input type="text" id="channel_id" placeholder="UCq6VFHwMzcMXbuKyG7SQYIg" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Channel Name *</label>
+                            <input type="text" id="channel_name" placeholder="Peppa Pig Official" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="channel_description" placeholder="Channel description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Thumbnail URL</label>
+                        <input type="url" id="channel_thumbnail" placeholder="https://...">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Channel</button>
+                    <button type="reset" class="btn btn-secondary">Clear</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Existing Channels</h2>
+                <div id="channels-list" class="loading">Loading channels...</div>
+            </div>
+        </div>
+
+        <!-- Video Groups Tab -->
+        <div id="groups-tab" class="tab-content">
+            <div class="section">
+                <h2>Create New Group</h2>
+                <div id="group-message"></div>
+                <form onsubmit="createGroup(event)">
+                    <div class="form-group">
+                        <label>Group Name *</label>
+                        <input type="text" id="group_name" placeholder="Blippi Adventures" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="group_description" placeholder="Collection of Blippi adventure videos..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Group</button>
+                    <button type="reset" class="btn btn-secondary">Clear</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Existing Groups</h2>
+                <div id="groups-list" class="loading">Loading groups...</div>
+            </div>
+        </div>
+
+        <!-- Add Videos Tab -->
+        <div id="videos-tab" class="tab-content">
+            <div class="section">
+                <h2>Add Video to Group</h2>
+                <div id="video-message"></div>
+                <form onsubmit="addVideoToGroup(event)">
+                    <div class="form-group">
+                        <label>Select Group *</label>
+                        <select id="video_group_id" required>
+                            <option value="">-- Select Group --</option>
+                        </select>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Video ID *</label>
+                            <input type="text" id="video_id" placeholder="dQw4w9WgXcQ" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Video Title *</label>
+                            <input type="text" id="video_title" placeholder="Blippi Learns About Colors" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Video Thumbnail URL</label>
+                        <input type="url" id="video_thumbnail" placeholder="https://i.ytimg.com/vi/VIDEO_ID/hqdefault.jpg">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Video</button>
+                    <button type="reset" class="btn btn-secondary">Clear</button>
+                </form>
+            </div>
+
+            <div class="section">
+                <h2>Group Videos</h2>
+                <div class="form-group">
+                    <label>Select Group to View Videos</label>
+                    <select id="view_group_id" onchange="loadGroupVideos(this.value)">
+                        <option value="">-- Select Group --</option>
+                    </select>
+                </div>
+                <div id="group-videos-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+
+            if (tabName === 'channels') loadChannels();
+            if (tabName === 'groups') loadGroups();
+            if (tabName === 'videos') {
+                loadGroupsForSelect();
+                loadGroupVideos('');
+            }
+        }
+
+        // Show message
+        function showMessage(elementId, message, type = 'success') {
+            const el = document.getElementById(elementId);
+            el.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => el.innerHTML = '', 5000);
+        }
+
+        // CHANNELS
+        async function loadChannels() {
+            const listEl = document.getElementById('channels-list');
+            try {
+                const response = await fetch(`${API_BASE}/api/channels`);
+                const data = await response.json();
+
+                if (data.success && data.channels.length > 0) {
+                    listEl.innerHTML = data.channels.map(channel => `
+                        <div class="list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-title">${channel.channel_name}</div>
+                                <div class="list-item-meta">
+                                    ID: ${channel.channel_id} | Added: ${new Date(channel.created_at).toLocaleDateString()}
+                                </div>
+                                ${channel.description ? `<div class="list-item-meta">${channel.description}</div>` : ''}
+                            </div>
+                            <div class="list-item-actions">
+                                <button class="btn btn-danger" onclick="deleteChannel('${channel.channel_id}', '${channel.channel_name}')">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    listEl.innerHTML = '<div class="empty-state">No channels found. Add your first channel above!</div>';
+                }
+            } catch (error) {
+                listEl.innerHTML = '<div class="empty-state">Error loading channels</div>';
+            }
+        }
+
+        async function addChannel(event) {
+            event.preventDefault();
+
+            const data = {
+                channel_id: document.getElementById('channel_id').value,
+                channel_name: document.getElementById('channel_name').value,
+                description: document.getElementById('channel_description').value,
+                thumbnail: document.getElementById('channel_thumbnail').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/channels`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('channel-message', `Channel "${data.channel_name}" added successfully!`, 'success');
+                    event.target.reset();
+                    loadChannels();
+                } else {
+                    showMessage('channel-message', result.error || 'Failed to add channel', 'error');
+                }
+            } catch (error) {
+                showMessage('channel-message', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteChannel(channelId, channelName) {
+            if (!confirm(`Delete channel "${channelName}"?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/channels/${channelId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('channel-message', `Channel "${channelName}" deleted successfully!`, 'success');
+                    loadChannels();
+                } else {
+                    showMessage('channel-message', result.error || 'Failed to delete channel', 'error');
+                }
+            } catch (error) {
+                showMessage('channel-message', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        // GROUPS
+        async function loadGroups() {
+            const listEl = document.getElementById('groups-list');
+            try {
+                const response = await fetch(`${API_BASE}/api/groups`);
+                const data = await response.json();
+
+                if (data.success && data.groups.length > 0) {
+                    listEl.innerHTML = data.groups.map(group => `
+                        <div class="list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-title">
+                                    ${group.group_name}
+                                    <span class="badge">${group.video_count} videos</span>
+                                </div>
+                                ${group.description ? `<div class="list-item-meta">${group.description}</div>` : ''}
+                                <div class="list-item-meta">Created: ${new Date(group.created_at).toLocaleDateString()}</div>
+                            </div>
+                            <div class="list-item-actions">
+                                <button class="btn btn-primary" onclick="switchTab('videos'); document.getElementById('view_group_id').value='${group.id}'; loadGroupVideos('${group.id}')">View Videos</button>
+                                <button class="btn btn-danger" onclick="deleteGroup(${group.id}, '${group.group_name}')">Delete</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    listEl.innerHTML = '<div class="empty-state">No groups found. Create your first group above!</div>';
+                }
+            } catch (error) {
+                listEl.innerHTML = '<div class="empty-state">Error loading groups</div>';
+            }
+        }
+
+        async function createGroup(event) {
+            event.preventDefault();
+
+            const data = {
+                group_name: document.getElementById('group_name').value,
+                description: document.getElementById('group_description').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/groups`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('group-message', `Group "${data.group_name}" created successfully!`, 'success');
+                    event.target.reset();
+                    loadGroups();
+                    loadGroupsForSelect();
+                } else {
+                    showMessage('group-message', result.error || 'Failed to create group', 'error');
+                }
+            } catch (error) {
+                showMessage('group-message', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteGroup(groupId, groupName) {
+            if (!confirm(`Delete group "${groupName}" and all its videos?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/groups/${groupId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('group-message', `Group "${groupName}" deleted successfully!`, 'success');
+                    loadGroups();
+                    loadGroupsForSelect();
+                } else {
+                    showMessage('group-message', result.error || 'Failed to delete group', 'error');
+                }
+            } catch (error) {
+                showMessage('group-message', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        // VIDEOS
+        async function loadGroupsForSelect() {
+            try {
+                const response = await fetch(`${API_BASE}/api/groups`);
+                const data = await response.json();
+
+                if (data.success) {
+                    const options = data.groups.map(group =>
+                        `<option value="${group.id}">${group.group_name} (${group.video_count} videos)</option>`
+                    ).join('');
+
+                    document.getElementById('video_group_id').innerHTML =
+                        '<option value="">-- Select Group --</option>' + options;
+                    document.getElementById('view_group_id').innerHTML =
+                        '<option value="">-- Select Group --</option>' + options;
+                }
+            } catch (error) {
+                console.error('Error loading groups:', error);
+            }
+        }
+
+        async function addVideoToGroup(event) {
+            event.preventDefault();
+
+            const groupId = document.getElementById('video_group_id').value;
+            const data = {
+                video_id: document.getElementById('video_id').value,
+                video_title: document.getElementById('video_title').value,
+                video_thumbnail: document.getElementById('video_thumbnail').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/groups/${groupId}/videos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('video-message', `Video "${data.video_title}" added successfully!`, 'success');
+                    event.target.reset();
+                    if (document.getElementById('view_group_id').value === groupId) {
+                        loadGroupVideos(groupId);
+                    }
+                    loadGroups();
+                } else {
+                    showMessage('video-message', result.error || 'Failed to add video', 'error');
+                }
+            } catch (error) {
+                showMessage('video-message', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        async function loadGroupVideos(groupId) {
+            const listEl = document.getElementById('group-videos-list');
+
+            if (!groupId) {
+                listEl.innerHTML = '<div class="empty-state">Select a group to view its videos</div>';
+                return;
+            }
+
+            listEl.innerHTML = '<div class="loading">Loading videos...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/groups/${groupId}/videos`);
+                const data = await response.json();
+
+                if (data.success && data.videos.length > 0) {
+                    listEl.innerHTML = `
+                        <div class="card">
+                            <h3>${data.group.group_name}</h3>
+                            <p>${data.group.description || ''}</p>
+                            <p><strong>${data.count} videos</strong></p>
+                        </div>
+                        ${data.videos.map(video => `
+                            <div class="video-preview">
+                                ${video.video_thumbnail ? `<img src="${video.video_thumbnail}" alt="${video.video_title}">` : '<div style="width:120px;height:90px;background:#eee;border-radius:5px;"></div>'}
+                                <div class="video-preview-content">
+                                    <div class="video-preview-title">${video.video_title}</div>
+                                    <div class="video-preview-id">ID: ${video.video_id} | Position: ${video.position}</div>
+                                </div>
+                                <button class="btn btn-danger" onclick="deleteVideo(${groupId}, ${video.id}, '${video.video_title}')">Delete</button>
+                            </div>
+                        `).join('')}
+                    `;
+                } else {
+                    listEl.innerHTML = '<div class="empty-state">No videos in this group yet</div>';
+                }
+            } catch (error) {
+                listEl.innerHTML = '<div class="empty-state">Error loading videos</div>';
+            }
+        }
+
+        async function deleteVideo(groupId, videoId, videoTitle) {
+            if (!confirm(`Delete video "${videoTitle}"?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/groups/${groupId}/videos/${videoId}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showMessage('video-message', `Video "${videoTitle}" deleted successfully!`, 'success');
+                    loadGroupVideos(groupId);
+                    loadGroups();
+                } else {
+                    showMessage('video-message', result.error || 'Failed to delete video', 'error');
+                }
+            } catch (error) {
+                showMessage('video-message', 'Error: ' + error.message, 'error');
+            }
+        }
+
+        // Load initial data
+        loadChannels();
+    </script>
+</body>
+</html>
