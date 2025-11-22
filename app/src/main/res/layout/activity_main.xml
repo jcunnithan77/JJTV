@@ -30,20 +30,6 @@
             android:padding="8dp" />
     </LinearLayout>
 
-
-    <ImageButton
-        android:id="@+id/settingsButton"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="16dp"
-        android:src="@android:drawable/ic_menu_preferences"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Settings"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:clickable="true"/>
-
     <ImageButton
         android:id="@+id/refreshButton"
         android:layout_width="56dp"

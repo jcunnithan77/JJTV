@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit
 
 class BackendExtractor {
 
-    // Backend server URL - Render deployment
-    private val BACKEND_URL = "https://jjtv.onrender.com"
+    // Backend server URL - Runs locally on Android TV via Termux
+    private val BACKEND_URL = "http://127.0.0.1:5000"
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(60, TimeUnit.SECONDS)
@@ -150,6 +150,66 @@ class BackendExtractor {
 
         } catch (e: Exception) {
             Log.e("BackendExtractor", "Error fetching playlist: ${e.message}", e)
+            return@withContext emptyList()
+        }
+    }
+
+    /**
+     * Fetch video groups from backend
+     */
+    suspend fun fetchGroups(): List<VideoGroup> = withContext(Dispatchers.IO) {
+        try {
+            Log.d("BackendExtractor", "Fetching video groups from backend")
+
+            val apiUrl = "$BACKEND_URL/api/groups"
+            val request = Request.Builder()
+                .url(apiUrl)
+                .build()
+
+            val response = client.newCall(request).execute()
+            val responseBody = response.body?.string()
+
+            if (response.isSuccessful && responseBody != null) {
+                val json = JSONObject(responseBody)
+                val groupsArray = json.optJSONArray("groups")
+                val groups = mutableListOf<VideoGroup>()
+
+                if (groupsArray != null) {
+                    for (i in 0 until groupsArray.length()) {
+                        val groupObj = groupsArray.getJSONObject(i)
+                        val groupName = groupObj.optString("name", "Untitled Group")
+                        val videosArray = groupObj.optJSONArray("videos")
+                        val videos = mutableListOf<VideoItem>()
+
+                        if (videosArray != null) {
+                            for (j in 0 until videosArray.length()) {
+                                val videoObj = videosArray.getJSONObject(j)
+                                videos.add(VideoItem(
+                                    id = videoObj.optString("video_id"),
+                                    title = videoObj.optString("title", "Video"),
+                                    thumbnail = videoObj.optString("thumbnail", "")
+                                ))
+                            }
+                        }
+
+                        // Use first video's thumbnail as group thumbnail, or empty string
+                        val groupThumb = videos.firstOrNull()?.thumbnail ?: ""
+
+                        if (videos.isNotEmpty()) {
+                            groups.add(VideoGroup(groupName, groupThumb, videos))
+                        }
+                    }
+                }
+
+                Log.d("BackendExtractor", "Fetched ${groups.size} groups from backend")
+                return@withContext groups
+            }
+
+            Log.w("BackendExtractor", "Failed to fetch groups from backend")
+            return@withContext emptyList()
+
+        } catch (e: Exception) {
+            Log.e("BackendExtractor", "Error fetching groups: ${e.message}", e)
             return@withContext emptyList()
         }
     }

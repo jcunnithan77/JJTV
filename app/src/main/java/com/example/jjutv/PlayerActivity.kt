@@ -24,9 +24,9 @@ class PlayerActivity : AppCompatActivity() {
     private var player: ExoPlayer? = null
 
     // Multiple extractors for fallback
-    private val backendExtractor = BackendExtractor()  // BEST - uses yt-dlp on server
-    private val youtubeExtractor = YouTubeExtractor()
+    private val backendExtractor = BackendExtractor()  // Backend runs on Android TV via Termux
     private val newPipeExtractor = NewPipeExtractor()
+    private val youtubeExtractor = YouTubeExtractor()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +57,7 @@ class PlayerActivity : AppCompatActivity() {
 
                 var streamUrl: String? = null
 
-                // Try Method 1: Backend Server with yt-dlp (MOST RELIABLE!)
+                // Try Method 1: Backend Server with yt-dlp (runs on Android TV via Termux)
                 Log.d("PlayerActivity", "Method 1: Backend server with yt-dlp...")
                 streamUrl = backendExtractor.extractVideoUrl(videoId)
 

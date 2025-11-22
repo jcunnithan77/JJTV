@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private val groupList = mutableListOf<VideoGroup>()
     private lateinit var channelManager: ChannelManager
-    private val playlistExtractor = YouTubePlaylistExtractor()
+    private val backendExtractor = BackendExtractor()
 
 //    private val standbyHandler = Handler(Looper.getMainLooper())
 //    private val standbyRunnable = object : Runnable {
@@ -64,15 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
         val refreshButton: ImageButton = findViewById(R.id.refreshButton)
         refreshButton.setOnClickListener {
-            groupList.clear()
-            recyclerView.adapter?.notifyDataSetChanged()
             fetchData()
-        }
-
-        val settingsButton: ImageButton = findViewById(R.id.settingsButton)
-        settingsButton.setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java)
-            startActivity(intent)
         }
 
         fetchData()
@@ -82,69 +74,36 @@ class MainActivity : AppCompatActivity() {
     private fun fetchData() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // Load from local videos.json file
-                val jsonString = assets.open("videos.json").bufferedReader().use { it.readText() }
-                val json = JSONObject(jsonString)
-
-                val groupsArray = json.optJSONArray("groups")
-                if (groupsArray != null) {
-                    for (i in 0 until groupsArray.length()) {
-                        val group = groupsArray.getJSONObject(i)
-                        val groupName = group.getString("name")
-                        val groupThumb = group.getString("thumbnail")
-
-                        val videos = mutableListOf<VideoItem>()
-
-                        // Check if this group has a playlist URL
-                        val playlistUrl = group.optString("playlistUrl")
-                        if (playlistUrl.isNotEmpty()) {
-                            // Extract videos from playlist
-                            Log.d("FetchData", "Extracting playlist for group: $groupName")
-                            withContext(Dispatchers.Main) {
-                                standbyText.text = "Loading playlist: $groupName..."
-                                standbyText.visibility = View.VISIBLE
-                            }
-
-                            val videoIds = playlistExtractor.extractPlaylistVideos(playlistUrl)
-                            Log.d("FetchData", "Extracted ${videoIds.size} videos from playlist")
-
-                            for (videoId in videoIds) {
-                                val thumbnail = "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
-                                videos.add(VideoItem(videoId, thumbnail, ""))
-                            }
-
-                            if (videoIds.isEmpty()) {
-                                Log.w("FetchData", "No videos extracted from playlist: $playlistUrl")
-                            }
-                        } else {
-                            // Use individual video IDs from array
-                            val videosArray = group.optJSONArray("videos")
-                            if (videosArray != null) {
-                                for (j in 0 until videosArray.length()) {
-                                    val videoId = videosArray.getString(j)
-                                    val thumbnail = "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
-                                    videos.add(VideoItem(videoId, thumbnail, ""))
-                                }
-                            }
-                        }
-
-                        // Only add group if it has videos
-                        if (videos.isNotEmpty()) {
-                            groupList.add(VideoGroup(groupName, groupThumb, videos))
-                        } else {
-                            Log.w("FetchData", "Skipping empty group: $groupName")
-                        }
-                    }
+                // Clear existing groups to prevent duplicates
+                withContext(Dispatchers.Main) {
+                    groupList.clear()
+                    recyclerView.adapter?.notifyDataSetChanged()
                 }
 
-                Log.d("FetchData", "Loaded ${groupList.size} groups from local JSON")
+                // Fetch video groups from backend server
                 withContext(Dispatchers.Main) {
-                    if (groupList.isNotEmpty()) {
+                    standbyText.text = "Loading video groups from backend..."
+                    standbyText.visibility = View.VISIBLE
+                }
+
+                Log.d("FetchData", "Fetching groups from backend")
+                val backendGroups = backendExtractor.fetchGroups()
+
+                if (backendGroups.isNotEmpty()) {
+                    // Backend fetch successful
+                    groupList.addAll(backendGroups)
+                    Log.d("FetchData", "Successfully loaded ${backendGroups.size} groups from backend")
+
+                    withContext(Dispatchers.Main) {
                         recyclerView.adapter = GroupAdapter(groupList, this@MainActivity)
                         standbyText.visibility = View.GONE
                         recyclerView.visibility = View.VISIBLE
-                    } else {
-                        standbyText.text = "No videos available in videos.json"
+                    }
+                } else {
+                    // No groups available
+                    Log.w("FetchData", "No groups available from backend")
+                    withContext(Dispatchers.Main) {
+                        standbyText.text = "No video groups available.\nCreate groups via Admin Panel at:\nhttp://192.168.1.5:5000/admin"
                         standbyText.visibility = View.VISIBLE
                         recyclerView.visibility = View.GONE
                     }
@@ -152,10 +111,11 @@ class MainActivity : AppCompatActivity() {
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.e("FetchData", "Error loading videos.json: ${e.message}")
+                Log.e("FetchData", "Error loading videos from backend: ${e.message}")
                 withContext(Dispatchers.Main) {
-                    standbyText.text = "Error loading videos: ${e.message}"
+                    standbyText.text = "Error: Cannot connect to backend server.\nMake sure backend is running in Termux:\npython ~/jjtv-backend/server.py"
                     standbyText.visibility = View.VISIBLE
+                    recyclerView.visibility = View.GONE
                 }
             }
         }
@@ -163,10 +123,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // Refresh data when returning from settings
-        groupList.clear()
-        recyclerView.adapter?.notifyDataSetChanged()
-        fetchData()
+        // Don't auto-refresh to prevent duplicate loading
+        // User can use refresh button if needed
     }
 
     private fun checkStandbyTime() {

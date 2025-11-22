@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JJUTV Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #f5f5f5;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: #666;
+        }
+
+        .tab:hover {
+            background: #e0e0e0;
+        }
+
+        .tab.active {
+            background: white;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        .btn-warning {
+            background: #ed8936;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+
+        .btn-secondary {
+            background: #718096;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        .video-group {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .video-group h3 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .group-header {
+            cursor: pointer;
+            user-select: none;
+            margin-bottom: 10px;
+        }
+
+        .group-header:hover {
+            opacity: 0.8;
+        }
+
+        .group-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .expand-icon {
+            font-size: 1.2em;
+            transition: transform 0.3s;
+            display: inline-block;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .video-group p {
+            color: #718096;
+            margin-bottom: 15px;
+        }
+
+        .video-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .video-list.expanded {
+            max-height: 10000px;
+            transition: max-height 0.5s ease-in;
+        }
+
+        .video-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .video-item img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 8px;
+        }
+
+        .video-item .title {
+            font-size: 0.9em;
+            color: #2d3748;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-item .video-id {
+            font-size: 0.75em;
+            color: #a0aec0;
+            margin-bottom: 8px;
+        }
+
+        .video-item .btn-danger {
+            padding: 5px 10px;
+            font-size: 0.85em;
+            width: 100%;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            opacity: 0.9;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .alert-info {
+            background: #bee3f8;
+            color: #2c5282;
+            border: 1px solid #90cdf4;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #a0aec0;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: 1 1 50%;
+            }
+
+            .video-list {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>JJUTV Admin Panel</h1>
+            <p>Manage video groups and server settings</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="tab" onclick="switchTab('groups')">Video Groups</button>
+            <button class="tab" onclick="switchTab('add-group')">Add Group</button>
+            <button class="tab" onclick="switchTab('test')">Test Extractor</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="section">
+                <h2>Server Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 id="total-groups">0</h3>
+                        <p>Video Groups</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="total-videos">0</h3>
+                        <p>Total Videos</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="cache-size">0</h3>
+                        <p>Cache Entries</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="server-status">Online</h3>
+                        <p>Server Status</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Quick Actions</h2>
+                <button class="btn btn-primary" onclick="loadGroups()">Refresh Data</button>
+                <button class="btn btn-warning" onclick="clearCache()">Clear Cache</button>
+                <button class="btn btn-secondary" onclick="testExtractor()">Test Extractor</button>
+            </div>
+
+            <div id="dashboard-alert"></div>
+        </div>
+
+        <!-- Video Groups Tab -->
+        <div id="groups" class="tab-content">
+            <div class="section">
+                <h2>Video Groups</h2>
+                <div id="groups-alert"></div>
+                <div id="groups-container">
+                    <div class="loading">Loading groups...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Group Tab -->
+        <div id="add-group" class="tab-content">
+            <div class="section">
+                <h2>Create New Video Group</h2>
+                <div id="add-group-alert"></div>
+
+                <div class="form-group">
+                    <label>Group Name</label>
+                    <input type="text" id="group-name" placeholder="e.g., Blippi Adventures">
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="group-description" placeholder="Brief description of this video group"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Import Method</label>
+                    <select id="import-method" onchange="toggleImportMethod()">
+                        <option value="manual">Manual Video IDs</option>
+                        <option value="playlist">YouTube Playlist</option>
+                        <option value="channel">YouTube Channel</option>
+                    </select>
+                </div>
+
+                <div id="manual-import" class="form-group">
+                    <label>Video IDs (one per line or comma-separated)</label>
+                    <textarea id="group-videos" placeholder="jXglJNRB7ZA&#x0a;K2NRhN5-ZQo&#x0a;or jXglJNRB7ZA, K2NRhN5-ZQo"></textarea>
+                </div>
+
+                <div id="playlist-import" class="form-group" style="display: none;">
+                    <label>YouTube Playlist ID or URL</label>
+                    <input type="text" id="playlist-id" placeholder="PLxxx... or https://www.youtube.com/playlist?list=PLxxx...">
+                    <div class="form-group">
+                        <label>Max Videos to Import (optional, default: 50)</label>
+                        <input type="number" id="playlist-max" value="50" min="1" max="200">
+                    </div>
+                </div>
+
+                <div id="channel-import" class="form-group" style="display: none;">
+                    <label>YouTube Channel ID or URL</label>
+                    <input type="text" id="channel-id" placeholder="UCxxx... or https://www.youtube.com/@channelname">
+                    <div class="form-group">
+                        <label>Max Videos to Import (optional, default: 50)</label>
+                        <input type="number" id="channel-max" value="50" min="1" max="200">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="createGroup()">Create Group</button>
+            </div>
+
+            <div class="section">
+                <h2>Add Videos to Existing Group</h2>
+                <div id="add-video-alert"></div>
+
+                <div class="form-group">
+                    <label>Select Group</label>
+                    <select id="select-group">
+                        <option value="">-- Select a group --</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Import Method</label>
+                    <select id="add-import-method" onchange="toggleAddImportMethod()">
+                        <option value="manual">Manual Video IDs</option>
+                        <option value="playlist">YouTube Playlist</option>
+                        <option value="channel">YouTube Channel</option>
+                    </select>
+                </div>
+
+                <div id="add-manual-import" class="form-group">
+                    <label>Video IDs to Add (one per line or comma-separated)</label>
+                    <textarea id="add-videos" placeholder="jXglJNRB7ZA&#x0a;K2NRhN5-ZQo"></textarea>
+                </div>
+
+                <div id="add-playlist-import" class="form-group" style="display: none;">
+                    <label>YouTube Playlist ID or URL</label>
+                    <input type="text" id="add-playlist-id" placeholder="PLxxx... or https://www.youtube.com/playlist?list=PLxxx...">
+                    <div class="form-group">
+                        <label>Max Videos to Import (optional, default: 50)</label>
+                        <input type="number" id="add-playlist-max" value="50" min="1" max="200">
+                    </div>
+                </div>
+
+                <div id="add-channel-import" class="form-group" style="display: none;">
+                    <label>YouTube Channel ID or URL</label>
+                    <input type="text" id="add-channel-id" placeholder="UCxxx... or https://www.youtube.com/@channelname">
+                    <div class="form-group">
+                        <label>Max Videos to Import (optional, default: 50)</label>
+                        <input type="number" id="add-channel-max" value="50" min="1" max="200">
+                    </div>
+                </div>
+
+                <button class="btn btn-success" onclick="addVideosToGroup()">Add Videos</button>
+            </div>
+        </div>
+
+        <!-- Test Extractor Tab -->
+        <div id="test" class="tab-content">
+            <div class="section">
+                <h2>Test Video Extractor</h2>
+                <div id="test-alert"></div>
+
+                <div class="form-group">
+                    <label>YouTube Video ID or URL</label>
+                    <input type="text" id="test-video-id" placeholder="e.g., jXglJNRB7ZA or https://www.youtube.com/watch?v=jXglJNRB7ZA">
+                </div>
+
+                <button class="btn btn-primary" onclick="testVideoExtraction()">Test Extraction</button>
+
+                <div id="test-result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = window.location.origin;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGroups();
+            loadServerStats();
+        });
+
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            // Load data for specific tabs
+            if (tabName === 'groups') {
+                loadGroups();
+            } else if (tabName === 'add-group') {
+                loadGroupsForSelect();
+            } else if (tabName === 'dashboard') {
+                loadServerStats();
+            }
+        }
+
+        async function loadServerStats() {
+            try {
+                const response = await fetch(`${API_URL}/`);
+                const data = await response.json();
+
+                document.getElementById('server-status').textContent = data.status === 'online' ? 'Online' : 'Offline';
+
+                const groups = await fetch(`${API_URL}/api/groups`).then(r => r.json());
+                const totalGroups = groups.groups ? groups.groups.length : 0;
+                const totalVideos = groups.groups ? groups.groups.reduce((sum, g) => sum + g.videos.length, 0) : 0;
+
+                document.getElementById('total-groups').textContent = totalGroups;
+                document.getElementById('total-videos').textContent = totalVideos;
+                document.getElementById('cache-size').textContent = '~';
+            } catch (error) {
+                console.error('Failed to load stats:', error);
+            }
+        }
+
+        async function loadGroups() {
+            const container = document.getElementById('groups-container');
+            container.innerHTML = '<div class="loading">Loading groups...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/groups`);
+                const data = await response.json();
+
+                if (!data.groups || data.groups.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <p>No video groups found. Create your first group!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+                data.groups.forEach((group, index) => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'video-group';
+                    groupDiv.innerHTML = `
+                        <div class="group-header" onclick="toggleGroup(${index})">
+                            <h3>
+                                <div class="group-title">
+                                    <span class="expand-icon" id="icon-${index}">▶</span>
+                                    <span>${group.name}</span>
+                                </div>
+                                <div class="group-actions" onclick="event.stopPropagation()">
+                                    <button class="btn btn-danger" onclick="deleteGroup('${group.id}')">Delete Group</button>
+                                </div>
+                            </h3>
+                        </div>
+                        <p>${group.description || 'No description'}</p>
+                        <p><strong>${group.videos.length}</strong> videos - <span style="color: #667eea; font-weight: 600;">Click to expand</span></p>
+                        <div class="video-list" id="videos-${index}">
+                            ${group.videos.map(video => `
+                                <div class="video-item">
+                                    <img src="https://i.ytimg.com/vi/${video.video_id}/hqdefault.jpg" alt="${video.title || 'Video'}">
+                                    <div class="title">${video.title || 'Untitled Video'}</div>
+                                    <div class="video-id">${video.video_id}</div>
+                                    <button class="btn btn-danger" onclick="deleteVideo('${group.id}', '${video.video_id}')">Remove</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    container.appendChild(groupDiv);
+                });
+
+                loadServerStats();
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="alert alert-error">
+                        Failed to load groups: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function loadGroupsForSelect() {
+            try {
+                const response = await fetch(`${API_URL}/api/groups`);
+                const data = await response.json();
+
+                const select = document.getElementById('select-group');
+                select.innerHTML = '<option value="">-- Select a group --</option>';
+
+                if (data.groups) {
+                    data.groups.forEach(group => {
+                        const option = document.createElement('option');
+                        option.value = group.id;
+                        option.textContent = group.name;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load groups:', error);
+            }
+        }
+
+        function toggleGroup(index) {
+            const videoList = document.getElementById(`videos-${index}`);
+            const icon = document.getElementById(`icon-${index}`);
+
+            if (videoList.classList.contains('expanded')) {
+                videoList.classList.remove('expanded');
+                icon.classList.remove('expanded');
+            } else {
+                videoList.classList.add('expanded');
+                icon.classList.add('expanded');
+            }
+        }
+
+        function toggleImportMethod() {
+            const method = document.getElementById('import-method').value;
+            document.getElementById('manual-import').style.display = method === 'manual' ? 'block' : 'none';
+            document.getElementById('playlist-import').style.display = method === 'playlist' ? 'block' : 'none';
+            document.getElementById('channel-import').style.display = method === 'channel' ? 'block' : 'none';
+        }
+
+        function toggleAddImportMethod() {
+            const method = document.getElementById('add-import-method').value;
+            document.getElementById('add-manual-import').style.display = method === 'manual' ? 'block' : 'none';
+            document.getElementById('add-playlist-import').style.display = method === 'playlist' ? 'block' : 'none';
+            document.getElementById('add-channel-import').style.display = method === 'channel' ? 'block' : 'none';
+        }
+
+        function extractPlaylistId(input) {
+            // Extract playlist ID from URL or return as-is
+            const match = input.match(/[?&]list=([^&]+)/);
+            return match ? match[1] : input;
+        }
+
+        function extractChannelId(input) {
+            // Extract channel ID from URL or return as-is
+            const match = input.match(/youtube\.com\/(channel\/|@|c\/)([^/?&]+)/);
+            if (match) {
+                return match[2];
+            }
+            return input;
+        }
+
+        async function createGroup() {
+            const name = document.getElementById('group-name').value.trim();
+            const description = document.getElementById('group-description').value.trim();
+            const method = document.getElementById('import-method').value;
+
+            if (!name) {
+                showAlert('add-group-alert', 'Please enter a group name', 'error');
+                return;
+            }
+
+            try {
+                let requestBody = { name, description };
+
+                if (method === 'manual') {
+                    const videosText = document.getElementById('group-videos').value.trim();
+                    const videoIds = videosText
+                        .split(/[\n,]+/)
+                        .map(id => id.trim())
+                        .filter(id => id.length > 0);
+                    requestBody.video_ids = videoIds;
+                } else if (method === 'playlist') {
+                    const playlistInput = document.getElementById('playlist-id').value.trim();
+                    const maxResults = parseInt(document.getElementById('playlist-max').value);
+                    if (!playlistInput) {
+                        showAlert('add-group-alert', 'Please enter a playlist ID or URL', 'error');
+                        return;
+                    }
+                    requestBody.playlist_id = extractPlaylistId(playlistInput);
+                    requestBody.max_results = maxResults;
+                } else if (method === 'channel') {
+                    const channelInput = document.getElementById('channel-id').value.trim();
+                    const maxResults = parseInt(document.getElementById('channel-max').value);
+                    if (!channelInput) {
+                        showAlert('add-group-alert', 'Please enter a channel ID or URL', 'error');
+                        return;
+                    }
+                    requestBody.channel_id = extractChannelId(channelInput);
+                    requestBody.max_results = maxResults;
+                }
+
+                showAlert('add-group-alert', 'Creating group... This may take a moment.', 'info');
+
+                const response = await fetch(`${API_URL}/api/groups`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('add-group-alert', `Group "${name}" created successfully with ${data.group.videos.length} videos!`, 'success');
+                    document.getElementById('group-name').value = '';
+                    document.getElementById('group-description').value = '';
+                    document.getElementById('group-videos').value = '';
+                    document.getElementById('playlist-id').value = '';
+                    document.getElementById('channel-id').value = '';
+                    loadGroupsForSelect();
+                } else {
+                    showAlert('add-group-alert', data.error || 'Failed to create group', 'error');
+                }
+            } catch (error) {
+                showAlert('add-group-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function addVideosToGroup() {
+            const groupId = document.getElementById('select-group').value;
+            const method = document.getElementById('add-import-method').value;
+
+            if (!groupId) {
+                showAlert('add-video-alert', 'Please select a group', 'error');
+                return;
+            }
+
+            try {
+                let requestBody = {};
+
+                if (method === 'manual') {
+                    const videosText = document.getElementById('add-videos').value.trim();
+                    if (!videosText) {
+                        showAlert('add-video-alert', 'Please enter video IDs', 'error');
+                        return;
+                    }
+                    const videoIds = videosText
+                        .split(/[\n,]+/)
+                        .map(id => id.trim())
+                        .filter(id => id.length > 0);
+                    requestBody.video_ids = videoIds;
+                } else if (method === 'playlist') {
+                    const playlistInput = document.getElementById('add-playlist-id').value.trim();
+                    const maxResults = parseInt(document.getElementById('add-playlist-max').value);
+                    if (!playlistInput) {
+                        showAlert('add-video-alert', 'Please enter a playlist ID or URL', 'error');
+                        return;
+                    }
+                    requestBody.playlist_id = extractPlaylistId(playlistInput);
+                    requestBody.max_results = maxResults;
+                } else if (method === 'channel') {
+                    const channelInput = document.getElementById('add-channel-id').value.trim();
+                    const maxResults = parseInt(document.getElementById('add-channel-max').value);
+                    if (!channelInput) {
+                        showAlert('add-video-alert', 'Please enter a channel ID or URL', 'error');
+                        return;
+                    }
+                    requestBody.channel_id = extractChannelId(channelInput);
+                    requestBody.max_results = maxResults;
+                }
+
+                showAlert('add-video-alert', 'Adding videos... This may take a moment.', 'info');
+
+                const response = await fetch(`${API_URL}/api/groups/${groupId}/videos`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(requestBody)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('add-video-alert', `Added ${data.added_count} video(s) successfully!`, 'success');
+                    document.getElementById('add-videos').value = '';
+                    document.getElementById('add-playlist-id').value = '';
+                    document.getElementById('add-channel-id').value = '';
+                } else {
+                    showAlert('add-video-alert', data.error || 'Failed to add videos', 'error');
+                }
+            } catch (error) {
+                showAlert('add-video-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteGroup(groupId) {
+            if (!confirm('Are you sure you want to delete this group?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/groups/${groupId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('groups-alert', 'Group deleted successfully', 'success');
+                    loadGroups();
+                } else {
+                    showAlert('groups-alert', data.error || 'Failed to delete group', 'error');
+                }
+            } catch (error) {
+                showAlert('groups-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteVideo(groupId, videoId) {
+            if (!confirm('Remove this video from the group?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/groups/${groupId}/videos/${videoId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('groups-alert', 'Video removed successfully', 'success');
+                    loadGroups();
+                } else {
+                    showAlert('groups-alert', data.error || 'Failed to remove video', 'error');
+                }
+            } catch (error) {
+                showAlert('groups-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function clearCache() {
+            if (!confirm('Clear all cached video data?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/cache/clear`, {
+                    method: 'POST'
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showAlert('dashboard-alert', data.message, 'success');
+                    loadServerStats();
+                } else {
+                    showAlert('dashboard-alert', 'Failed to clear cache', 'error');
+                }
+            } catch (error) {
+                showAlert('dashboard-alert', `Error: ${error.message}`, 'error');
+            }
+        }
+
+        async function testVideoExtraction() {
+            const input = document.getElementById('test-video-id').value.trim();
+            const resultDiv = document.getElementById('test-result');
+
+            if (!input) {
+                showAlert('test-alert', 'Please enter a video ID or URL', 'error');
+                return;
+            }
+
+            // Extract video ID from URL if needed
+            let videoId = input;
+            const urlMatch = input.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+            if (urlMatch) {
+                videoId = urlMatch[1];
+            }
+
+            resultDiv.innerHTML = '<div class="loading">Testing extraction...</div>';
+
+            try {
+                const response = await fetch(`${API_URL}/api/extract?video_id=${videoId}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-success" style="margin-top: 20px;">
+                            <h3>Extraction Successful!</h3>
+                            <p><strong>Title:</strong> ${data.title}</p>
+                            <p><strong>Video ID:</strong> ${data.video_id}</p>
+                            <p><strong>Duration:</strong> ${Math.floor(data.duration / 60)}:${(data.duration % 60).toString().padStart(2, '0')}</p>
+                            <p><strong>Uploader:</strong> ${data.uploader}</p>
+                            <img src="${data.thumbnail}" style="max-width: 100%; border-radius: 8px; margin-top: 10px;">
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="alert alert-error" style="margin-top: 20px;">
+                            <h3>Extraction Failed</h3>
+                            <p>${data.error}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="alert alert-error" style="margin-top: 20px;">
+                        <h3>Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showAlert(elementId, message, type) {
+            const alertDiv = document.getElementById(elementId);
+            alertDiv.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            setTimeout(() => {
+                alertDiv.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
