@@ -215,6 +215,35 @@ class BackendExtractor {
     }
 
     /**
+     * Fetch schedules from backend
+     */
+    fun fetchSchedules(): JSONObject? {
+        try {
+            Log.d("BackendExtractor", "Fetching schedules from backend")
+
+            val apiUrl = "$BACKEND_URL/api/schedules"
+            val request = Request.Builder()
+                .url(apiUrl)
+                .build()
+
+            val response = client.newCall(request).execute()
+            val responseBody = response.body?.string()
+
+            if (response.isSuccessful && responseBody != null) {
+                Log.d("BackendExtractor", "Successfully fetched schedules")
+                return JSONObject(responseBody)
+            }
+
+            Log.w("BackendExtractor", "Failed to fetch schedules")
+            return null
+
+        } catch (e: Exception) {
+            Log.e("BackendExtractor", "Error fetching schedules: ${e.message}", e)
+            return null
+        }
+    }
+
+    /**
      * Test backend server connectivity
      */
     suspend fun testConnection(): Boolean = withContext(Dispatchers.IO) {

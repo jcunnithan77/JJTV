@@ -132,6 +132,78 @@ def init_database():
         conn.commit()
         logger.info("Database initialized successfully")
 
+def add_default_blippi_group():
+    """Add default Blippi group if no groups exist"""
+    try:
+        groups_data = load_groups()
+        if len(groups_data['groups']) > 0:
+            logger.info("Groups already exist, skipping default Blippi group")
+            return
+
+        logger.info("No groups found, adding default Blippi group...")
+
+        # Blippi channel handle
+        channel_id = "Blippi"
+        name = "Blippi - Educational Videos for Kids"
+        description = "Fun and educational videos featuring Blippi exploring the world"
+        max_results = 50
+
+        # Fetch videos from Blippi channel
+        url = f'https://www.youtube.com/@{channel_id}/videos'
+        opts = YDL_OPTS.copy()
+        opts['extract_flat'] = True
+        opts['playlistend'] = max_results
+
+        videos = []
+        with yt_dlp.YoutubeDL(opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            if 'entries' in info:
+                for entry in info['entries'][:max_results]:
+                    vid_id = entry.get('id')
+                    if vid_id:
+                        videos.append({
+                            'video_id': vid_id,
+                            'title': entry.get('title', 'Unknown Title'),
+                            'thumbnail': entry.get('thumbnail', f'https://i.ytimg.com/vi/{vid_id}/hqdefault.jpg'),
+                            'duration': entry.get('duration', 0),
+                            'uploader': entry.get('uploader', 'Blippi')
+                        })
+
+        if len(videos) == 0:
+            logger.warning("Could not fetch Blippi videos")
+            return
+
+        # Save to database
+        group_id = str(uuid.uuid4())
+        created_at = datetime.now().isoformat()
+
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO groups (id, name, description, created_at)
+                VALUES (?, ?, ?, ?)
+            ''', (group_id, name, description, created_at))
+
+            for video in videos:
+                cursor.execute('''
+                    INSERT INTO videos (group_id, video_id, title, thumbnail, duration, uploader)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (
+                    group_id,
+                    video['video_id'],
+                    video['title'],
+                    video.get('thumbnail', ''),
+                    video.get('duration', 0),
+                    video.get('uploader', 'Blippi')
+                ))
+
+            conn.commit()
+
+        logger.info(f"Successfully added default Blippi group with {len(videos)} videos")
+
+    except Exception as e:
+        logger.error(f"Error adding default Blippi group: {e}")
+
 def load_groups():
     """Load video groups from SQLite database"""
     try:
@@ -1127,11 +1199,14 @@ def unblock_channel(channel_id):
 
     except Exception as e:
         logger.error(f"Error unblocking channel: {e}")
-        return jsonify({'success': False, 'error': str(e)}'), 500
+        return jsonify({'success': False, 'error': str(e)}), 500
 
 if __name__ == '__main__':
     # Initialize database
     init_database()
+
+    # Add default Blippi group if no groups exist
+    add_default_blippi_group()
 
     # Run server
     # For production, use gunicorn or similar WSGI server
